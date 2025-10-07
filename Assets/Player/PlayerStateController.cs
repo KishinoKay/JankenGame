@@ -1,9 +1,28 @@
 using UnityEngine;
-using UnityEngine.InputSystem; // インプットシステムを使うために必要！
+using UnityEngine.InputSystem;
 
 public enum JankenState
 {
     Guu, Choki, Paa
+}
+
+[System.Serializable]
+public class JankenStateData
+{
+    [Header("じゃんけんの種類（グー・チョキ・パー）")]
+    public JankenState state;
+
+    [Header("表示スプライト")]
+    public Sprite sprite;
+
+    [Header("重さ（gravityScale）")]
+    public float gravityScale = 1f;
+
+    [Header("移動速度")]
+    public float moveSpeed = 5f;
+
+    [Header("eyeの位置")]
+    public Vector3 eyeLocalPosition;
 }
 
 public class PlayerStateController : MonoBehaviour
@@ -13,17 +32,17 @@ public class PlayerStateController : MonoBehaviour
     [Header("コンポーネント")]
     public SpriteRenderer spriteRenderer;
     public Rigidbody2D rb;
+    public Transform eye; // eyeオブジェクトをインスペクターで指定
+    public PlayerController playerController; // ← 追加
 
-    [Header("状態ごとの設定")]
-    public Sprite[] stateSprites;
+    [Header("グーチョキパーごとの設定")]
+    public JankenStateData[] stateDatas = new JankenStateData[3];
 
     // Player Inputコンポーネントから、このメソッドが呼ばれるようになる
     public void OnChangeState(InputAction.CallbackContext context)
     {
-        // context.performed は「ボタンが押された瞬間」を意味する
         if (context.performed)
         {
-            Debug.Log("返信！");
             SwitchNextState();
         }
     }
@@ -36,7 +55,7 @@ public class PlayerStateController : MonoBehaviour
     void SwitchNextState()
     {
         int nextStateIndex = (int)CurrentState + 1;
-        if (nextStateIndex >= 3)
+        if (nextStateIndex >= stateDatas.Length)
         {
             nextStateIndex = 0;
         }
@@ -46,18 +65,29 @@ public class PlayerStateController : MonoBehaviour
     void ChangeState(JankenState newState)
     {
         CurrentState = newState;
-        spriteRenderer.sprite = stateSprites[(int)CurrentState];
-        switch (CurrentState)
+        var data = GetStateData(newState);
+        if (data != null)
         {
-            case JankenState.Guu:
-                rb.gravityScale = 5f;
-                break;
-            case JankenState.Choki:
-                rb.gravityScale = 1f;
-                break;
-            case JankenState.Paa:
-                rb.gravityScale = 0.8f;
-                break;
+            spriteRenderer.sprite = data.sprite;
+            rb.gravityScale = data.gravityScale;
+            if (eye != null)
+            {
+                eye.localPosition = data.eyeLocalPosition;
+            }
+            // ここでPlayerControllerのmoveSpeedも更新
+            if (playerController != null)
+            {
+                playerController.moveSpeed = data.moveSpeed;
+            }
         }
+    }
+
+    JankenStateData GetStateData(JankenState state)
+    {
+        foreach (var data in stateDatas)
+        {
+            if (data.state == state) return data;
+        }
+        return null;
     }
 }
