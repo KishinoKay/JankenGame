@@ -3,6 +3,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("目の操作")]
+    [Tooltip("操作したいPupilControllerをここに設定")]
+    public PupilController pupilController; // ★追加：PupilControllerへの参照
+
     [Header("移動速度")]
     public float moveSpeed = 5f;
 
@@ -42,6 +46,13 @@ public class PlayerController : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
+        // pupilControllerが設定されているか確認
+        if (pupilController != null)
+        {
+            // 読み取った入力値をPupilControllerのメソッドに渡す
+            Vector2 lookInput = context.ReadValue<Vector2>();
+            pupilController.UpdatePupilPosition(lookInput);
+        }
     }
 
     public void OnJump(InputAction.CallbackContext context)
