@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 92050555}
   - component: {fileID: 92050554}
   - component: {fileID: 92050553}
-  - component: {fileID: 92050552}
+  - component: {fileID: 92050557}
   m_Layer: 5
   m_Name: Settings
   m_TagString: Untagged
@@ -160,21 +160,6 @@ RectTransform:
   m_AnchoredPosition: {x: 630, y: -177}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &92050552
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 92050550}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fc436327b2fd5249aadc9920af2642b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SceneTransitionWithSound
-  sceneToLoad: Setting
-  buttonSound: {fileID: 8300000, guid: 9862a3caf405d694ca1445be66ef70e7, type: 3}
-  transitionButton: {fileID: 92050554}
 --- !u!82 &92050553
 AudioSource:
   m_ObjectHideFlags: 0
@@ -315,19 +300,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 92050555}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 92050552}
-        m_TargetAssemblyTypeName: SceneTransitionWithSound, Assembly-CSharp
-        m_MethodName: StartTransition
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &92050555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,6 +339,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 92050550}
   m_CullTransparentMesh: 1
+--- !u!114 &92050557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 92050550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f45dfdf667e1f1428ad6bef91256305, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneTransitionButton
+  sceneToLoad: Setting
+  buttonSound: {fileID: 8300000, guid: 9862a3caf405d694ca1445be66ef70e7, type: 3}
 --- !u!1 &352299759
 GameObject:
   m_ObjectHideFlags: 0
@@ -594,7 +581,7 @@ GameObject:
   - component: {fileID: 596181938}
   - component: {fileID: 596181937}
   - component: {fileID: 596181936}
-  - component: {fileID: 596181935}
+  - component: {fileID: 596181940}
   m_Layer: 5
   m_Name: New Game
   m_TagString: Untagged
@@ -622,21 +609,6 @@ RectTransform:
   m_AnchoredPosition: {x: 221, y: 145}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &596181935
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 596181933}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fc436327b2fd5249aadc9920af2642b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SceneTransitionWithSound
-  sceneToLoad: Stage1
-  buttonSound: {fileID: 8300000, guid: 9862a3caf405d694ca1445be66ef70e7, type: 3}
-  transitionButton: {fileID: 596181937}
 --- !u!82 &596181936
 AudioSource:
   m_ObjectHideFlags: 0
@@ -777,19 +749,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 596181938}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 596181935}
-        m_TargetAssemblyTypeName: SceneTransitionWithSound, Assembly-CSharp
-        m_MethodName: StartTransition
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &596181938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -828,6 +788,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 596181933}
   m_CullTransparentMesh: 1
+--- !u!114 &596181940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 596181933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f45dfdf667e1f1428ad6bef91256305, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneTransitionButton
+  sceneToLoad: Stage1
+  buttonSound: {fileID: 8300000, guid: 9862a3caf405d694ca1445be66ef70e7, type: 3}
 --- !u!1 &605719942
 GameObject:
   m_ObjectHideFlags: 0
@@ -1692,7 +1666,7 @@ GameObject:
   - component: {fileID: 1742306285}
   - component: {fileID: 1742306284}
   - component: {fileID: 1742306283}
-  - component: {fileID: 1742306282}
+  - component: {fileID: 1742306287}
   m_Layer: 5
   m_Name: Stage Select
   m_TagString: Untagged
@@ -1720,21 +1694,6 @@ RectTransform:
   m_AnchoredPosition: {x: 221, y: -15}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1742306282
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1742306280}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fc436327b2fd5249aadc9920af2642b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SceneTransitionWithSound
-  sceneToLoad: Select
-  buttonSound: {fileID: 8300000, guid: 9862a3caf405d694ca1445be66ef70e7, type: 3}
-  transitionButton: {fileID: 1742306284}
 --- !u!82 &1742306283
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1875,19 +1834,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1742306285}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1742306282}
-        m_TargetAssemblyTypeName: SceneTransitionWithSound, Assembly-CSharp
-        m_MethodName: StartTransition
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1742306285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1926,6 +1873,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1742306280}
   m_CullTransparentMesh: 1
+--- !u!114 &1742306287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1742306280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f45dfdf667e1f1428ad6bef91256305, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneTransitionButton
+  sceneToLoad: Select
+  buttonSound: {fileID: 8300000, guid: 9862a3caf405d694ca1445be66ef70e7, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
