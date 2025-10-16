@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     }
 
     // このメソッドをPlayerInputコンポーネントから呼び出す
-    public void OnPause(InputAction.CallbackContext context)
+    public void OnPauseButton(InputAction.CallbackContext context)
     {
         // キーが押された瞬間だけ処理する
         if (context.performed)
@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
     {
         if (resumeSound != null)
         {
-            audioSource[0].PlayOneShot(resumeSound);
+            audioSource[1].PlayOneShot(resumeSound);
         }
         isPaused = false;
         Time.timeScale = 1f; // 時間を再開

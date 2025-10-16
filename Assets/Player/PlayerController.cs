@@ -7,6 +7,10 @@ public class PlayerController : MonoBehaviour
     [Tooltip("操作したいPupilControllerをここに設定")]
     public PupilController pupilController; // ★追加：PupilControllerへの参照
 
+    [Header("ゲーム管理")]
+    [Tooltip("ゲーム管理を行うGameManagerをここに設定")]
+    public GameManager GameManager; // ★追加：GameManagerへの参照
+
     [Header("移動速度")]
     public float moveSpeed = 5f;
 
@@ -63,6 +67,17 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("jannpu！");
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        }
+    }
+
+    // ★追加：Pauseの入力受付メソッド
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        // Pauseの処理はGameManagerに任せる
+        Debug.Log("Pause");
+        if (GameManager != null)
+        {
+            GameManager.OnPauseButton(context);
         }
     }
 }

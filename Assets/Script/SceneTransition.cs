@@ -67,24 +67,28 @@ public class SceneTransition : MonoBehaviour
 
     private IEnumerator LoadSceneRoutine(string sceneName, AudioClip sound)
     {
+        // ① まずフェードアウト
         yield return StartCoroutine(Fade(1.0f));
 
-        Time.timeScale = 1f; // 念のため、時間を通常に戻す
-
+        // ② 裏でシーンをロード開始
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
         asyncLoad.allowSceneActivation = false;
 
+        // ③ SEを再生して待機（時間は止まったまま）
         if (sound != null)
         {
             audioSource.PlayOneShot(sound);
-            yield return new WaitForSeconds(sound.length);
+            yield return new WaitForSecondsRealtime(sound.length);
         }
         
+        // ④ ロードが終わるのを待つ
         while (asyncLoad.progress < 0.9f)
         {
             yield return null;
         }
 
+        // ⑤ シーンを有効化する直前に、時間を元に戻す！
+        Time.timeScale = 1f;
         asyncLoad.allowSceneActivation = true;
     }
     
@@ -94,6 +98,7 @@ public class SceneTransition : MonoBehaviour
         isLoading = false;
     }
 
+    // フェード処理のコルーチン
     private IEnumerator Fade(float targetAlpha)
     {
         fadeImage.gameObject.SetActive(true);
@@ -102,14 +107,15 @@ public class SceneTransition : MonoBehaviour
 
         while (time < fadeDuration)
         {
-            time += Time.deltaTime;
+            // ここを unscaledDeltaTime に変更！
+            time += Time.unscaledDeltaTime;
             float alpha = Mathf.Lerp(startAlpha, targetAlpha, time / fadeDuration);
             fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, alpha);
             yield return null;
         }
 
         fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, targetAlpha);
-        
+
         if (targetAlpha == 0)
         {
             fadeImage.gameObject.SetActive(false);
