@@ -1,11 +1,15 @@
-// GameManager.cs (Input System版)
+// GameManager.cs (完成版)
 using UnityEngine;
-using UnityEngine.InputSystem; // Input Systemの名前空間を追加
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject pauseUIPanel;
+    [Header("参照するコンポーネント")]
+    [SerializeField] private GameObject pauseUIPanel;
+    [SerializeField] private PlayerInput playerInput;
+    [SerializeField] private GameObject firstSelectedButton; // ポーズ時に最初に選択するボタン
     private bool isPaused = false;
 
     [Header("ゲーム中断の設定")]
@@ -16,11 +20,11 @@ public class GameManager : MonoBehaviour
     [Tooltip("再生するボタンのSE")]
     [SerializeField] private AudioClip resumeSound;
 
-    private AudioSource[] audioSource;
+    private AudioSource audioSource;
 
     void Start()
     {
-        audioSource = GetComponents<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
         pauseUIPanel.SetActive(false);
     }
 
@@ -45,25 +49,35 @@ public class GameManager : MonoBehaviour
     {
         if (pauseSound != null)
         {
-            audioSource[0].PlayOneShot(pauseSound);
+            audioSource.PlayOneShot(pauseSound);
         }
         isPaused = true;
         Time.timeScale = 0f; // 時間を止める
         pauseUIPanel.SetActive(true);
-        // 必要なら、プレイヤーの操作Action Mapを無効化し、UI操作のAction Mapを有効化する
-        // FindObjectOfType<PlayerInput>().SwitchCurrentActionMap("UI");
+
+        // UI操作のAction Mapに切り替える
+        playerInput.SwitchCurrentActionMap("UI");
+
+        // ★★★ ここからが追加した処理 ★★★
+        // 一度選択をクリアしてから、指定したボタンを選択状態にする
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstSelectedButton);
     }
 
     public void ResumeGame()
     {
         if (resumeSound != null)
         {
-            audioSource[1].PlayOneShot(resumeSound);
+            audioSource.PlayOneShot(resumeSound);
         }
         isPaused = false;
         Time.timeScale = 1f; // 時間を再開
         pauseUIPanel.SetActive(false);
-        // UI操作のAction Mapからプレイヤー操作のAction Mapに戻す
-        // FindObjectOfType<PlayerInput>().SwitchCurrentActionMap("Player");
+
+        // プレイヤー操作のAction Mapに戻す
+        playerInput.SwitchCurrentActionMap("Player");
+        
+        // ★★★ 選択状態をクリアしておく ★★★
+        EventSystem.current.SetSelectedGameObject(null);
     }
 }

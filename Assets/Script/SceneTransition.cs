@@ -9,11 +9,11 @@ public class SceneTransition : MonoBehaviour
     public static SceneTransition Instance { get; private set; }
 
     [Header("フェード設定")]
+    [Tooltip("シーン切り替え直前のフェードにかかる時間")] // Tooltipの文言を分かりやすく変更
+    [SerializeField] private float fadeDuration = 1.0f;
+
     [Tooltip("フェードに使用するUIのImage")]
     [SerializeField] private Image fadeImage;
-
-    [Tooltip("フェードにかかる時間")]
-    [SerializeField] private float fadeDuration = 1.0f;
 
     private AudioSource audioSource;
     private bool isLoading = false;
@@ -65,40 +65,45 @@ public class SceneTransition : MonoBehaviour
         StartCoroutine(LoadSceneRoutine(sceneName, sound));
     }
 
+    // ▼▼▼ このコルーチンの処理順を大きく変更 ▼▼▼
     private IEnumerator LoadSceneRoutine(string sceneName, AudioClip sound)
     {
-        // ① まずフェードアウト
-        yield return StartCoroutine(Fade(1.0f));
-
-        // ② 裏でシーンをロード開始
+        // ① 裏でシーンをロード開始
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
         asyncLoad.allowSceneActivation = false;
 
-        // ③ SEを再生して待機（時間は止まったまま）
+        // ② SEを再生
         if (sound != null)
         {
             audioSource.PlayOneShot(sound);
-            yield return new WaitForSecondsRealtime(sound.length);
         }
-        
-        // ④ ロードが終わるのを待つ
-        while (asyncLoad.progress < 0.9f)
+
+        // ③ SEの再生とシーンのロードが終わるのを並行して待つ
+        float soundWaitTime = sound != null ? sound.length : 0f;
+        float startTime = Time.unscaledTime; // 時間計測を開始
+
+        // SEの再生時間が経過し、かつ、ロードの進捗が0.9以上になるまで待機
+        while (Time.unscaledTime - startTime < soundWaitTime || asyncLoad.progress < 0.9f)
         {
             yield return null;
         }
 
-        // ⑤ シーンを有効化する直前に、時間を元に戻す！
-        Time.timeScale = 1f;
+        // ④ すべての準備が完了したので、フェードアウトを開始
+        yield return StartCoroutine(Fade(1.0f));
+
+        // ⑤ フェードアウト完了後、シーンを有効化する
+        Time.timeScale = 1f; // ポーズ中からの遷移も考慮して時間を戻す
         asyncLoad.allowSceneActivation = true;
     }
     
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // シーンが完全にロードされたらフェードインを開始
         StartCoroutine(Fade(0.0f));
         isLoading = false;
     }
 
-    // フェード処理のコルーチン
+    // フェード処理のコルーチン (変更なし)
     private IEnumerator Fade(float targetAlpha)
     {
         fadeImage.gameObject.SetActive(true);
@@ -107,7 +112,6 @@ public class SceneTransition : MonoBehaviour
 
         while (time < fadeDuration)
         {
-            // ここを unscaledDeltaTime に変更！
             time += Time.unscaledDeltaTime;
             float alpha = Mathf.Lerp(startAlpha, targetAlpha, time / fadeDuration);
             fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, alpha);
