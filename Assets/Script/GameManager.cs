@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour
 
     private AudioSource audioSource;
 
+    private float lastPauseTime;
+    private float pauseCooldown = 0.2f;
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -34,6 +37,16 @@ public class GameManager : MonoBehaviour
         // キーが押された瞬間だけ処理する
         if (context.performed)
         {
+            // ★★★ 3. 時間チェックのロジックを追加 ★★★
+            // (現在の実時間 - 最後にポーズした実時間) がクールダウン時間より短い場合
+            if (Time.realtimeSinceStartup - lastPauseTime < pauseCooldown)
+            {
+                // 処理を中断して、何も起こさない
+                return;
+            }
+            
+            // クールダウン時間を超えていたら、時刻を更新
+            lastPauseTime = Time.realtimeSinceStartup;
             if (isPaused)
             {
                 ResumeGame();

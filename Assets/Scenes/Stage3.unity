@@ -7159,6 +7159,9 @@ MonoBehaviour:
   resultUIPanel: {fileID: 60335396}
   firstSelectedButton: {fileID: 1388042403}
   playerObject: {fileID: 1588137455}
+  entrancePoint: {fileID: 566382579}
+  autoMoveSpeed: 2
+  autoMoveTimeout: 10
   goalSound: {fileID: 8300000, guid: c302547795e9463409a9c40bb10d60e9, type: 3}
 --- !u!61 &566382577
 BoxCollider2D:
