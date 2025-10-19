@@ -409,6 +409,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &94563613
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 94563615}
+  - component: {fileID: 94563614}
+  m_Layer: 0
+  m_Name: SettingsApplicator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &94563614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94563613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6816ffb368a066b4fa5fe5df841b3350, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SettingsApplicator
+  audioMixer: {fileID: 24100000, guid: 10670b33c93c96e4b8133854b7fab1e0, type: 2}
+--- !u!4 &94563615
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94563613}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 529.6879, y: 259.68686, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &250549726
 GameObject:
   m_ObjectHideFlags: 0
@@ -888,7 +933,7 @@ AudioSource:
   m_GameObject: {fileID: 1180640217}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 10670b33c93c96e4b8133854b7fab1e0, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
@@ -1676,6 +1721,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BGMSource
       objectReference: {fileID: 0}
+    - target: {fileID: 7825773665101748470, guid: a67b2b5c6a2ee2c4190d18928b22abde, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 24300002, guid: 10670b33c93c96e4b8133854b7fab1e0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1752,3 +1801,4 @@ SceneRoots:
   - {fileID: 248351477768906521}
   - {fileID: 3440473923036964341}
   - {fileID: 1180640220}
+  - {fileID: 94563615}
