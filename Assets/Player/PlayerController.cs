@@ -5,14 +5,21 @@ public class PlayerController : MonoBehaviour
 {
     [Header("目の操作")]
     [Tooltip("操作したいPupilControllerをここに設定")]
-    public PupilController pupilController; // ★追加：PupilControllerへの参照
+    public PupilController pupilController;
 
     [Header("ゲーム管理")]
     [Tooltip("ゲーム管理を行うGameManagerをここに設定")]
-    public GameManager GameManager; // ★追加：GameManagerへの参照
+    public GameManager GameManager;
 
-    [Header("移動速度")]
-    public float moveSpeed = 5f;
+    // ↓↓↓ ここを変更 ↓↓↓
+    [Header("地面の移動速度")]
+    [Tooltip("（PlayerStateControllerによって自動設定されます）")]
+    public float groundMoveSpeed = 5f; // groundMoveSpeed に変更
+
+    [Header("空中の移動速度")] // ★追加
+    [Tooltip("（PlayerStateControllerによって自動設定されます）")]
+    public float airMoveSpeed = 4f; // ★追加
+    // ↑↑↑ ここまで変更 ↑↑↑
 
     [Header("ジャンプ力")]
     public float jumpForce = 10f;
@@ -31,29 +38,37 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Updateは入力受付など、フレーム毎の処理に使う
     void Update()
     {
         // ここでは何もしない
     }
 
-    // FixedUpdateは物理演算など、一定間隔の処理に使う
     private void FixedUpdate()
     {
-        // 接地判定をFixedUpdateに移動
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-        // 移動処理
-        rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
+        // ↓↓↓ ここを変更 ↓↓↓
+        // 1. 現在適用すべき移動速度を決定する
+        float currentMoveSpeed;
+        if (isGrounded)
+        {
+            currentMoveSpeed = groundMoveSpeed; // 地面にいれば地面の速度
+        }
+        else
+        {
+            currentMoveSpeed = airMoveSpeed; // 空中にいれば空中の速度
+        }
+
+        // 2. 決定した速度で移動処理
+        rb.linearVelocity = new Vector2(moveInput.x * currentMoveSpeed, rb.linearVelocity.y);
+        // ↑↑↑ ここまで変更 ↑↑↑
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
-        // pupilControllerが設定されているか確認
         if (pupilController != null)
         {
-            // 読み取った入力値をPupilControllerのメソッドに渡す
             Vector2 lookInput = context.ReadValue<Vector2>();
             pupilController.UpdatePupilPosition(lookInput);
         }
@@ -61,8 +76,6 @@ public class PlayerController : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        // ジャンプの入力受付自体はUpdateのタイミングに近いですが、
-        // isGroundedの判定がFixedUpdateで正確に行われるため、ここはそのままでOK
         if (context.performed && isGrounded)
         {
             Debug.Log("jannpu！");
@@ -70,10 +83,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // ★追加：Pauseの入力受付メソッド
     public void OnPause(InputAction.CallbackContext context)
     {
-        // Pauseの処理はGameManagerに任せる
         Debug.Log("Pause");
         if (GameManager != null)
         {

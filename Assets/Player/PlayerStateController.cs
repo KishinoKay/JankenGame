@@ -18,8 +18,13 @@ public class JankenStateData
     [Header("重さ（gravityScale）")]
     public float gravityScale = 1f;
 
-    [Header("移動速度")]
-    public float moveSpeed = 5f;
+    // ↓↓↓ ここを変更 ↓↓↓
+    [Header("地面の移動速度")]
+    public float groundMoveSpeed = 5f; // 分かりやすくリネーム
+
+    [Header("空中の移動速度")] // ★追加
+    public float airMoveSpeed = 4f; // ★追加 (空中は少し遅くするなど)
+    // ↑↑↑ ここまで変更 ↑↑↑
 
     [Header("eyeの位置")]
     public Vector3 eyeLocalPosition;
@@ -33,7 +38,7 @@ public class PlayerStateController : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     public Rigidbody2D rb;
     public Transform eye; // eyeオブジェクトをインスペクターで指定
-    public PlayerController playerController; // ← 追加
+    public PlayerController playerController;
 
     [Header("グーチョキパーごとの設定")]
     public JankenStateData[] stateDatas = new JankenStateData[3];
@@ -74,11 +79,15 @@ public class PlayerStateController : MonoBehaviour
             {
                 eye.localPosition = data.eyeLocalPosition;
             }
-            // ここでPlayerControllerのmoveSpeedも更新
+
+            // ↓↓↓ ここを変更 ↓↓↓
+            // PlayerControllerの「地面」と「空中」の速度を両方更新
             if (playerController != null)
             {
-                playerController.moveSpeed = data.moveSpeed;
+                playerController.groundMoveSpeed = data.groundMoveSpeed; // 地面の速度を設定
+                playerController.airMoveSpeed = data.airMoveSpeed;     // 空中の速度を設定
             }
+            // ↑↑↑ ここまで変更 ↑↑↑
         }
     }
 
