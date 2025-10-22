@@ -18,13 +18,17 @@ public class JankenStateData
     [Header("重さ（gravityScale）")]
     public float gravityScale = 1f;
 
-    // ↓↓↓ ここを変更 ↓↓↓
     [Header("地面の移動速度")]
-    public float groundMoveSpeed = 5f; // 分かりやすくリネーム
+    public float groundMoveSpeed = 5f;
 
-    [Header("空中の移動速度")] // ★追加
-    public float airMoveSpeed = 4f; // ★追加 (空中は少し遅くするなど)
-    // ↑↑↑ ここまで変更 ↑↑↑
+    [Header("空中の移動速度")]
+    public float airMoveSpeed = 4f;
+
+    // ↓↓↓ ここに追加 ↓↓↓
+    [Header("水中のジャンプ力")]
+    [Tooltip("水中でのジャンプ（推進）力")]
+    public float waterJumpForce = 8f; // ★追加
+    // ↑↑↑ ここまで追加 ↑↑↑
 
     [Header("eyeの位置")]
     public Vector3 eyeLocalPosition;
@@ -54,6 +58,11 @@ public class PlayerStateController : MonoBehaviour
 
     void Start()
     {
+        // PlayerController が同じオブジェクトにあると想定
+        if (playerController == null)
+        {
+            playerController = GetComponent<PlayerController>();
+        }
         ChangeState(JankenState.Guu);
     }
 
@@ -74,20 +83,35 @@ public class PlayerStateController : MonoBehaviour
         if (data != null)
         {
             spriteRenderer.sprite = data.sprite;
-            rb.gravityScale = data.gravityScale;
+            
+            // 重力設定のロジック
+            if (playerController != null && playerController.IsInWater())
+            {
+                // 水中にいる場合：PlayerController が設定した水中の重力を維持
+                rb.gravityScale = playerController.waterGravityScale;
+            }
+            else
+            {
+                // 陸上にいる場合：ステートごとの重力を設定
+                rb.gravityScale = data.gravityScale;
+            }
+
             if (eye != null)
             {
                 eye.localPosition = data.eyeLocalPosition;
             }
 
-            // ↓↓↓ ここを変更 ↓↓↓
-            // PlayerControllerの「地面」と「空中」の速度を両方更新
+            // PlayerControllerの速度とジャンプ力を更新
             if (playerController != null)
             {
-                playerController.groundMoveSpeed = data.groundMoveSpeed; // 地面の速度を設定
-                playerController.airMoveSpeed = data.airMoveSpeed;     // 空中の速度を設定
+                playerController.groundMoveSpeed = data.groundMoveSpeed;
+                playerController.airMoveSpeed = data.airMoveSpeed;
+                
+                // ↓↓↓ ここに追加 ↓↓↓
+                // ★ステートごとの「水中のジャンプ力」を PlayerController に設定
+                playerController.waterJumpForce = data.waterJumpForce;
+                // ↑↑↑ ここまで追加 ↑↑↑
             }
-            // ↑↑↑ ここまで変更 ↑↑↑
         }
     }
 
@@ -98,5 +122,17 @@ public class PlayerStateController : MonoBehaviour
             if (data.state == state) return data;
         }
         return null;
+    }
+
+    // PlayerControllerから呼ばれるメソッド
+    // 水から出たときに、現在のステートの重力に戻すために使う
+    public void ApplyCurrentStateGravity()
+    {
+        var data = GetStateData(CurrentState);
+        if (data != null)
+        {
+            // 現在のステートが持つ本来の重力（陸上用）を設定
+            rb.gravityScale = data.gravityScale;
+        }
     }
 }
