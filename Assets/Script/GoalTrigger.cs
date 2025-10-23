@@ -69,12 +69,17 @@ public class GoalTrigger : MonoBehaviour
         {
             playerInput.enabled = false; // 一時的に入力を完全に無効化
         }
-
+        PlayerController playerController = playerObject.GetComponent<PlayerController>();
+        if (playerController != null)
+        {
+            playerController.enabled = false; // ★追加
+        }
         Rigidbody2D rb = playerObject.GetComponent<Rigidbody2D>();
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero; // velocity の方が一般的
             rb.gravityScale = 0;        // 重力を切る
+            rb.bodyType = RigidbodyType2D.Kinematic;      // 物理挙動を無効化
         }
         Debug.Log("2. プレイヤーの操作を無効化");
 

@@ -107,20 +107,12 @@ public class PlayerController : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        // ↓↓↓ ここを変更 ↓↓↓
         if (context.performed)
         {
-            // 判定を「陸上」と「水中」で分ける
+            // ↓↓↓ ここを変更 ↓↓↓
             
-            if (isGrounded) // 1. 陸上にいる場合
-            {
-                Debug.Log("jannpu！(陸上)");
-                // Y軸の速度をリセット（ジャンプの安定化）
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
-                // ★陸上のジャンプ力(jumpForce)を使用
-                rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse); 
-            }
-            else if (waterTriggerCount > 0) // 2. 水中にいる場合 (陸上ではない)
+            // 1. 最優先で水中判定を行う
+            if (waterTriggerCount > 0) 
             {
                 Debug.Log("jannpu！(水中)");
                 // Y軸の速度をリセット（水中推進のため）
@@ -128,9 +120,19 @@ public class PlayerController : MonoBehaviour
                 // ★ステートごとの水中のジャンプ力(waterJumpForce)を使用
                 rb.AddForce(Vector2.up * waterJumpForce, ForceMode2D.Impulse); 
             }
+            // 2. 水中でない場合（陸上）で、地面にいるか判定
+            else if (isGrounded) 
+            {
+                Debug.Log("jannpu！(陸上)");
+                // Y軸の速度をリセット（ジャンプの安定化）
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
+                // ★陸上のジャンプ力(jumpForce)を使用
+                rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse); 
+            }
             // (どちらでもない場合＝空中ではジャンプしない)
+            
+            // ↑↑↑ ここまで変更 ↑↑↑
         }
-        // ↑↑↑ ここまで変更 ↑↑↑
     }
 
     public void OnPause(InputAction.CallbackContext context)

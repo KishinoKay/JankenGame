@@ -417,6 +417,17 @@
                 },
                 {
                     "name": "",
+                    "id": "ec09b278-b2d6-406b-9af6-0da7f8347ae1",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "ChangeState",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "eb40bb66-4559-4dfa-9a2f-820438abb426",
                     "path": "<Keyboard>/space",
                     "interactions": "",
